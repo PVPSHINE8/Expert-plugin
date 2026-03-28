@@ -1,4 +1,4 @@
 package org.pvpshine.expert.command;
 
-public class comand2 {
+public class adsfas {
 }
