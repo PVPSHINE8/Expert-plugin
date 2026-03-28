@@ -1,4 +1,4 @@
 package org.pvpshine.expert.command;
 
-public class sadw {
+public class comand2 {
 }
