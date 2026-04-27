@@ -56,12 +56,14 @@ public class Gui {
     public static void OpenGui(org.bukkit.entity.Player player){
         Inventory inv = Bukkit.createInventory(null, 27, "ExpertGUI");
 
-        inv.setItem(9, getHeadFromBase64(CustomHead.STATSBTN.getBase64(), ChatColor.GRAY + "ѕᴛᴀᴛѕ"));
+        inv.setItem(8, getHeadFromBase64(CustomHead.STATSBTN.getBase64(), ChatColor.GRAY + "ѕᴛᴀᴛѕ"));
         inv.setItem(11, getHeadFromBase64(CustomHead.RED.getBase64(), ChatColor.DARK_RED + "Red"));
         inv.setItem(13, getHeadFromBase64(CustomHead.CYAN.getBase64(), ChatColor.BLUE + "Cyan"));
         inv.setItem(15, getHeadFromBase64(CustomHead.GREEN.getBase64(), ChatColor.GREEN + "Green"));
         player.openInventory(inv);
 
     }
+
+
 
 }
