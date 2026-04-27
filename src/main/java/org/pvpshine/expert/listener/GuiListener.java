@@ -23,6 +23,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.pvpshine.expert.command.Gui;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -48,7 +49,7 @@ public class GuiListener implements Listener {
     @EventHandler
     public void onClick(InventoryClickEvent e) {
 
-        if (!e.getView().getTitle().equals("Menu Expert")) return;
+        if (!e.getView().getTitle().equals("ExpertGUI")) return;
         e.setCancelled(true);
         if (e.getCurrentItem() == null) return;
 
@@ -71,21 +72,31 @@ public class GuiListener implements Listener {
         meta.addEnchant(Enchantment.UNBREAKING, 1, true);
         meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         clicked.setItemMeta(meta);
-        ItemStack red = api.getItemHead("3270");
+        ItemStack red = e.getCurrentItem();
         ItemStack cyan = api.getItemHead("3264");
         ItemStack green = api.getItemHead("3260");
 
-        if (clicked != null && clicked.isSimilar(red)) {
+        if (e.getSlot()== 8) {
+            ClickStatsBTN(p);
+        }
+
+        if (e.getSlot()== 11) {
             ClickRed(p);
         }
 
-        if (clicked != null && clicked.isSimilar(cyan)) {
+        if (e.getSlot()== 13) {
             ClickCyan(p);
         }
 
-        if (clicked != null && clicked.isSimilar(green)) {
+        if (e.getSlot()== 15) {
             ClickGreen(p);
         }
+    }
+
+    public void ClickStatsBTN(Player player) {
+        UUID id = player.getUniqueId();
+        player.performCommand("stats");
+
     }
 
     public void ClickRed(Player player) {
