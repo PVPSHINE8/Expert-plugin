@@ -1,0 +1,14 @@
+name: expert
+version: '1.21.4'
+main: org.pvpshine.expert.Expert
+api-version: '1.21'
+depend:
+  - AuraSkills
+  - HeadDB
+commands:
+  expert:
+    description: open gui expert skill
+    usage: /<command>
+  expertreset:
+    description: reset expert skill player
+    usage: /<command> <name>
