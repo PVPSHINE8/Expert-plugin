@@ -17,6 +17,12 @@ import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.pvpshine.expert.Expert;
+import me.arcaniax.hdb.api.DatabaseLoadEvent;
+import me.arcaniax.hdb.api.HeadDatabaseAPI;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -59,22 +65,25 @@ public class GuiListener implements Listener {
             m.removeEnchant(Enchantment.UNBREAKING);
             i.setItemMeta(m);
         }
-
+        HeadDatabaseAPI api = new HeadDatabaseAPI();
         ItemStack clicked = e.getCurrentItem();
         ItemMeta meta = clicked.getItemMeta();
         meta.addEnchant(Enchantment.UNBREAKING, 1, true);
         meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         clicked.setItemMeta(meta);
+        ItemStack red = api.getItemHead("3270");
+        ItemStack cyan = api.getItemHead("3264");
+        ItemStack green = api.getItemHead("3260");
 
-        if (clicked.getType() == Material.RED_WOOL) {
+        if (clicked != null && clicked.isSimilar(red)) {
             ClickRed(p);
         }
 
-        if (clicked.getType() == Material.CYAN_WOOL) {
+        if (clicked != null && clicked.isSimilar(cyan)) {
             ClickCyan(p);
         }
 
-        if (clicked.getType() == Material.GREEN_WOOL) {
+        if (clicked != null && clicked.isSimilar(green)) {
             ClickGreen(p);
         }
     }
@@ -220,4 +229,5 @@ public class GuiListener implements Listener {
         fw.setFireworkMeta(meta);
         fw.detonate();
     }
+
 }

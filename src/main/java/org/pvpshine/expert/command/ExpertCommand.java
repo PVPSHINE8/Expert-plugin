@@ -1,8 +1,10 @@
 package org.pvpshine.expert.command;
+import com.mojang.authlib.GameProfile;
 import dev.aurelium.auraskills.api.AuraSkillsApi;
 import dev.aurelium.auraskills.api.user.SkillsUser;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import com.mojang.authlib.properties.Property;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -15,106 +17,55 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.pvpshine.expert.Expert;
 import org.pvpshine.expert.listener.GuiListener;
+import me.arcaniax.hdb.api.DatabaseLoadEvent;
+import me.arcaniax.hdb.api.HeadDatabaseAPI;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.*;
 
 import org.bukkit.ChatColor;
 public class ExpertCommand implements CommandExecutor {
 
-    private final AuraSkillsApi api = AuraSkillsApi.get();
+    private final AuraSkillsApi auraApi = AuraSkillsApi.get();
     private final Expert plugin;
-
+    private HeadDatabaseAPI hdb;
     public ExpertCommand(Expert plugin) {
         this.plugin = plugin;
 
     }
+    private GameProfile makeProfileFromBase64(String base64) {
+        if (base64 == null || base64.isEmpty()) return null;
+        try {
+            GameProfile profile = new GameProfile(UUID.randomUUID(), "QEventBoxHead");
+            profile.getProperties().put("textures", new Property("textures", base64));
+            return profile;
+        } catch (Throwable t) {
+            return null;
+        }
+    }
+
 
     @Override
 
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         //if player use command, open the chest gui
-
+        HeadDatabaseAPI api = new HeadDatabaseAPI();
 
         if (command.getName().equalsIgnoreCase("expert")) {
-
-
             Player p = (Player) sender;
-            Inventory gui = Bukkit.createInventory(null, 27, "Menu Expert");
-            p.openInventory(gui);
-            //red
-            ItemStack red = new ItemStack(Material.RED_WOOL);
-            ItemMeta redMeta = red.getItemMeta();
-            redMeta.setDisplayName(ChatColor.DARK_RED + "ѕᴛʀᴏɴɢ");
-            redMeta.setLore(Arrays.asList(
-                    "",
-                    "§f[ѕᴛᴀᴛѕ]",
-                    "§cᴅᴀᴍᴀɢᴇ        +35",
-                    "§cᴄʀɪᴛ-ᴅᴀᴍᴀɢᴇ   +15",
-                    "§cѕᴘᴇᴇᴅ         +10",
-                    "§cʜᴇᴀʟᴛʜ        -20",
-                    "§cᴛᴏᴜɢʜᴛɴᴇѕѕ    -15"
-            ));
-            red.setItemMeta(redMeta);
-            //cyan
-            ItemStack cyan = new ItemStack(Material.CYAN_WOOL);
-            ItemMeta cyanMeta = cyan.getItemMeta();
-            cyanMeta.setDisplayName(ChatColor.WHITE + "ɴᴇᴜᴛʀᴀʟ");
-            cyanMeta.setLore(Arrays.asList(
-                    "",
-                    "§f[ѕᴛᴀᴛѕ ɴᴇᴜᴛʀᴀʟ]"
-            ));
-            cyan.setItemMeta(cyanMeta);
-
-            //green
-            ItemStack green = new ItemStack(Material.GREEN_WOOL);
-            ItemMeta greenMeta = green.getItemMeta();
-            greenMeta.setDisplayName(ChatColor.DARK_GREEN + "ᴛᴀɴᴋ");
-            greenMeta.setLore(Arrays.asList(
-                    "",
-                    "§f[ѕᴛᴀᴛѕ]",
-                    "§aᴅᴀᴍᴀɢᴇ        -15",
-                    "§aᴄʀɪᴛ-ᴅᴀᴍᴀɢᴇ   -10",
-                    "§aѕᴘᴇᴇᴅ         -20",
-                    "§aʜᴇᴀʟᴛʜ        +45",
-                    "§aᴛᴏᴜɢʜᴛɴᴇѕѕ    +35"
-            ));
-            green.setItemMeta(greenMeta);
-
-
-            gui.setItem(11, red);
-            gui.setItem(13, cyan);
-            gui.setItem(15, green);
-
-            UUID id = p.getUniqueId();
-
-            if (GuiListener.sudahClickRed.contains(id)) {
-                ItemMeta m = red.getItemMeta();
-                m.addEnchant(Enchantment.UNBREAKING, 1, true);
-                m.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-                red.setItemMeta(m);
-            }
-
-            if (GuiListener.sudahClickCyan.contains(id)) {
-                ItemMeta m = cyan.getItemMeta();
-                m.addEnchant(Enchantment.UNBREAKING, 1, true);
-                m.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-                cyan.setItemMeta(m);
-            }
-
-            if (GuiListener.sudahClickGreen.contains(id)) {
-                ItemMeta m = green.getItemMeta();
-                m.addEnchant(Enchantment.UNBREAKING, 1, true);
-                m.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-                green.setItemMeta(m);
-            }
-
+            Gui.OpenGui(p);
         }
+
         if (command.getName().equalsIgnoreCase("expertreset")) {
             Player p = (Player) sender;
             UUID id = p.getUniqueId();
-            SkillsUser user = api.getUser(id);
+            SkillsUser user = auraApi.getUser(id);
             if (!(sender instanceof Player)) return true; //kalo yg command player, bakal jalan
 
 

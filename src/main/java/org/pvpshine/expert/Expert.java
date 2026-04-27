@@ -1,5 +1,5 @@
 package org.pvpshine.expert;
-
+import org.bukkit.plugin.java.JavaPlugin;
 import dev.aurelium.auraskills.api.stat.Stats;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -12,20 +12,22 @@ import org.bukkit.event.server.BroadcastMessageEvent;
 import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.pvpshine.expert.command.ExpertCommand;
+import org.pvpshine.expert.listener.GuiListener;
+
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
 
 public final class Expert extends JavaPlugin implements Listener, CommandExecutor {
-    public Set<UUID> sudahPilih = new HashSet<>();
     @Override
     public void onEnable() {
-        getCommand("expert").setExecutor(this);
-        getServer().getPluginManager().registerEvents(this, this);
+        // Register Listener
+        getServer().getPluginManager().registerEvents(new GuiListener(this), this);
 
+        // Register Command
+        getCommand("expert").setExecutor(new ExpertCommand(this));
+        getCommand("expertreset").setExecutor(new ExpertCommand(this)); // Tambahkan ini
     }
-
-
-
 }
